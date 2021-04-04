@@ -10,7 +10,7 @@ Notes:
 2. Applications can also run in Linux Emulation Mode (LEM), in which case `/usr/bin` will symlink to `/apps/core`, `/etc` to `/config` etc.
 3. The root user is called the `admin` user in this OS,  because that is what it actually does (The only root part is that it owns the root directory).
 
-See the filesystem hierarchy (with some examples) at [github.com/crthpl/os-idea/fs-hierarchy](https://github.com/crthpl/os-idea/tree/master/fs-hierarchy]
+See the filesystem hierarchy (with some examples) at [github.com/crthpl/os-idea/fs-hierarchy](https://github.com/crthpl/os-idea/tree/master/fs-hierarchy)
 
 | Directory | Description |
 |--|--|
