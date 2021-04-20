@@ -14,13 +14,11 @@ See the filesystem hierarchy (with some examples) at [github.com/crthpl/os-idea/
 
 | Directory | Description |
 |--|--|
-| `/apps` | Equivalent to `/bin`, `usr/bin` and `/sbin`. Installed apps are placed in `/apps` (unless they are games). This folder may get more subfolders in the future, and applications can add their own (For example MS Office might have a `/apps/office` folder). Any `.app` files here (and in subdirectories) are hardcoded into your `$PATH`, you cannot change nor read your `$PATH` (Unless in LEM), you must assume that this is your `$PATH`.   |
+| `/apps` | Equivalent to `/bin`, `usr/bin` and `/sbin`. Installed apps are placed in `/apps` (unless they are games). This folder may get more subfolders in the future, and applications can add their own (For example MS Office might have a `/apps/office` folder). Any `.app` folders here (and in subdirectories) are hardcoded into your `$PATH`, you cannot change nor read your `$PATH` (Unless in LEM), you must assume that this is your `$PATH`. See the [`.app` directory structure](# App Directory Structure) |
 | `/apps/core` | Equivalent to `/bin`: contains core utilities such as `cd` and `cat`.  |
 | `/apps/system` | Equivalent to `/sbin`: contains essential system adminstration and boot commands such as `fsck` and `halt`. |
 | `/apps/games` | Equivalent to `/usr/games`. For games. |
-| `/config` | Equivalent to `/etc`. Contains root configuration files. Each app may have a subdirectory here to read configuration (`.cfg`) files. They may not access other apps config files).  |
 | `/home` | All home folders are here, including the admin user. Special users (Such as the admin user, or all those other wierd ones in `/etc/passswd` in Linux) can have special stuff about them specified in `/home/attr.cfg`. See the home directory structure |
-| `/resources` | Contains resource files, such as images. Each app may have a subdirectory here to write resource files. |
 | `/var` | Contains files that will be changed and read much more often then other files. Files in this folder should be more likely to be cached by the kernel, and writes should be withheld until a shutdown, the application closes, or a certain amount of memory has been used. The folder hierarchies of this folder is similar to the Linux eqivalent (`/var`). |
 | `/var/log` | Contains log files from applications. Each application may have their own subdirectory, with files of the format `logname_YEAR-MONTH-DAY_HOUR-MONTH-SECOND.log` where `logname` should be the name of the application for simpler application, or something different for larger applications with different logs being written at the same time (For applications that have multiple services, for example). Each subdirectory may also have a `crash` directory, for crash logs. The crash logs have the same naming format, but with the `.crash_log` extension instead. |
 | `/var/cache` | Contains cache files for large computations an application does not wish to repeat. Each application may have their own subdirectory. These files may be deleted without notice. |
@@ -29,9 +27,18 @@ See the filesystem hierarchy (with some examples) at [github.com/crthpl/os-idea/
 | `/mount/media` | Contains mount points for inserted media, such as USB sticks or CD-ROMs. |
 | `/share` | Contains folders used to share files between users. The folder names are of the format `john=nina=john2` and can have 2 or more users. |
 | `/library` | Contains `.so` files that can be used by multiple programs. Please do not prefix your library names with `lib`. |
-| `/data` | Data such as game save files or installed packages for package managers. |
-| `/documentation` | Contains man and info pages and other documentation related files. |
 | `/devices` | Contains device files |
+
+## App Directory Structure
+Files may only access files in this folder (unless they are verified system programs, or run with `sudo`), and folders that are opened with the program are piped into `console.r.0`.
+| File/Directory | Description |
+|--|--|
+| `manifest.cfg` | Contains metadata about the program, such as how to (un)install the program, what files the program can open, the icon path, and the executables to execute for what architectures (Complete app portability!). |
+| `config/` | Equivalent to `/etc`. Contains configuration (`.cfg`) files . There will be a CLI and a GUI program that parses these files and makes an easy-to-use interface for it. |
+| `data/` | Data such as game save files. |
+| `documentation/` | Contains man and info pages and other documentation related files. |
+| `resources/` | Contains resource files, such as images. User Texture Packs should be placed in a `config/` subdirectory. |
+| `exec/` | Contains the executable programs and internal libraries. Libraries that can be used by other programs (such as Electron) should be placed in the root `/lib`. The file that will be run at startup is specified in `manifest.cfg`. |
 
 
 ## Home directory structure
@@ -39,14 +46,12 @@ Each home directory has a `config/` folder to store configuration that overrides
 | Directory | Description |
 |--|--|
 | `apps/` | Programs installed only for the current user. The structure is the same as the root `/apps`. |
-| `config/` | Configuration that overrides the root config folder (`/config`) |
 | `dev/` | Development folder. This folder only exists if the user has the `dev` attribute.
 | `Documents/` | Documents. Videos are also stored here. |
 | `Downloads/` | Downloads from the [Internet](http://info.cern.ch/hypertext/WWW/TheProject.html). Default for broswers and wget/curl (if no directory specified). |
 | `var/` | Contains files that will be changed and read much more often then other files. Files in this folder should be more likely to be cached by the kernel, and writes should be withheld until a shutdown, the application closes, or a certain amount of memory has been used. The folder hierarchies of this folder is similar to the Linux eqivalent (`/var`). There is a duplicate of the root `/var` here, since othere users might be able to tell private information from cache data or logs. The structure in here is identical to the root `/var` (no need to repeat). |
 | `library/` | Libraries installed only for the current user. |
 | `mount/` | Contains temporarily mounted filesystems. |
-| `data/` | Data such as game save files or installed packages for package managers. |
 
 
 # Exit Codes
@@ -73,20 +78,18 @@ Exit codes have the following meaning:
 | -30000 | Everything that could go wrong went wrong |
 | -32767 | The program that crashed is `systemd` (or whatever equivalent @ will use) |
 | -32768 | Everything that could go wrong went wrong and even things that can't go wrong went wrong |
-Some of these may be changed in the future. Any exit code used not listed here should be accompanied by an error message to `outerr`
+Some of these may be changed in the future. Any exit code used not listed here should be accompanied by an error message to `console.w.1`
 
 # Devices
 Devices in @ are controlled through the `device` program or the `write` system call.
 All devices are in the `/devices` folder and they can have seperate channels. (This is to eliminate stuff like all the `loop#` or `tty#` devices) The driver can dynamically change the amount of channels. Channel indexes are 0-based. The read/write permissions can be used to see what the device supports. 
 
-
-
-Devices:
+List of Devices:
 | Name | Permission / Channels | Description |
 |--|--|--|
 | console | rw, 2 channels | Channel 0 write is equivalent to `stdout`, channel 0 read is equivalent to `stdin`, channel 1 write is equivalent to `stderr`, channel 1 read does not have a unix equivalent but can be used to read the stderr through a pipe, and give debug input to a program. Channel 1 is not meant for errors only, it should be refered to as "secondary output", but errors should be printed on secondary output, not primary output |
 
-
+Devices are specified as `name.r/w.channel_number`.
 
 # TTY equivalent
 The TTY system in Linux is entirely built on stuff from several decades ago, and if someone from thenabouts with expertise in unix time-traveled to today, they could still operate a shell just as well. The way TTY works today is an ugly mess of signals, way too many options, parity checks, which are no longer needed, but still there for backwards compatibility. See [The TTY demystified by Linus Akesson](https://www.linusakesson.net/programming/tty/) for an in-depth explanation of how the current system works. This replacement is meant to be fast and easy to understand.
