@@ -14,7 +14,7 @@ See the filesystem hierarchy (with some examples) at [github.com/crthpl/os-idea/
 
 | Directory | Description |
 |--|--|
-| `/apps` | Equivalent to `/bin`, `usr/bin` and `/sbin`. Installed apps are placed in `/apps` (unless they are games). This folder may get more subfolders in the future, and applications can add their own (For example MS Office might have a `/apps/office` folder). Any `.app` folders here (and in subdirectories) are hardcoded into your `$PATH`, you cannot change nor read your `$PATH` (Unless in LEM), you must assume that this is your `$PATH`. See the [`.app` directory structure](# App Directory Structure) |
+| `/apps` | Equivalent to `/bin`, `usr/bin` and `/sbin`. Installed apps are placed in `/apps` (unless they are games). This folder may get more subfolders in the future, and applications can add their own (For example MS Office might have a `/apps/office` folder). Any `.app` folders here (and in subdirectories) are hardcoded into your `$PATH`, you cannot change nor read your `$PATH` (Unless in LEM), you must assume that this is your `$PATH`. See the App Directory Structure |
 | `/apps/core` | Equivalent to `/bin`: contains core utilities such as `cd` and `cat`.  |
 | `/apps/system` | Equivalent to `/sbin`: contains essential system adminstration and boot commands such as `fsck` and `halt`. |
 | `/apps/games` | Equivalent to `/usr/games`. For games. |
@@ -101,7 +101,7 @@ The format is: `\e` + command (256 different commands) + args (args are known fr
 | Command | Args | Description |
 |--|--|--
 | 0x00 | - | Resets everything to defaults. (TODO: specify defaults) |
-| 0x01 | u16 | Set settings to preset arg(0). See [Presets](#Terminal Presets)|
+| 0x01 | u16 | Set settings to preset arg(0). See Terminal Presets. |
 | 0x02 | u8 | Set color to arg(0) |
 | 0x03 | u8 | Set position to arg(0) (in relation to top left, and numbers larger the terminal width go on next line) |
 | 0x04 | u16 | Set position to arg(0) (in relation to top left, and numbers larger the terminal width go on next line) |
@@ -110,16 +110,18 @@ The format is: `\e` + command (256 different commands) + args (args are known fr
 | 0x07 | u64, u64 | Set position to (arg(0), arg(1)) |
 | 0x08 | u8, u8, u8 | Set color to RGB of (R: arg(0), G: arg(1), B: arg(2)) |
 | 0x09 | u8, u8, u8, u8 | Set color to RGBA of (R: arg(0), G: arg(1), B: arg(2), A: arg(3)) |
-| 0x0a | u8, bool | Set text setting arg(0) to arg(1). See [Text Settings](#Text Settings) |
+| 0x0a | u8, bool | Set text setting arg(0) to arg(1). See Text Settings |
 | 0x0b | u256 | Same as above, but set all at the same time with bitfield. |
 | 0x0c | u8, u8, u8, u8 | Set color of element arg(0) to RGB of (R: arg(1), G: arg(2), B: arg(3)). Element (arg(0)) is defined as 0x00: Foreground, 0x01: Background, 0x02: Underline, 0x03: Overline, 0x04: Blinking speed where arg(1-3) is a u24 specifying the milliseconds between blinks. |
 | 0x0d | - | Swap foreground and background colors. |
+| 0x0e | u8, bool | Set Terminal Setting arg(0) to arg(1). See Terminal Settings. |
+| 0x0f | u8, i16 | Set Terminal Setting arg(0) to arg(1), but with more options than on/off. See Terminal Settings. |
 
 ## Terminal Presets
 | Number | Description |
 |--|--|
 | 0x00 | Default, same as `\e\x00`. |
-| 0x01 | Shells should run this before starting a Program. Enables |
+| 0x01 | Shells should run this before starting a Program. |
 
 ## Text Settings
 | Number | Description |
@@ -136,6 +138,23 @@ The format is: `\e` + command (256 different commands) + args (args are known fr
 | 0x09 | Blink (default twice per second) |
 | 0xfe | Rainbow (Equivalent to adding '| lolcat' to the end of the command) |
 | 0xff | Rainbow, but strobing (speed controlled by blink speed) |
+
+## Terminal Settings
+| Number | Description |
+| 0x00 | Input Echoing (display `console.r.0` on screen) |
+| 0x01 | Output Echoing (display `console.w.0` on screen |
+| 0x02 | Debug Input Echoing (display `console.r.1` on screen) |
+| 0x03 | Debug Output Echoing (display `console.r.1` on screen) |
+| 0x04 | EOF char, arg is the char that will send an EOF to `console.r.<current-mode>` |
+| 0x05 | EOL char, arg is the char that will send a newline to `console.r.<current-mode>`. |
+| 0x06 | Switch char, arg is the char that will switch between debug input and normal input. |
+| 0x07 | Erase char, arg is the char that will delete the previous character in `console.r.<current-mode>`. |
+| 0x08 | Erasing can erase to previous line. |
+| 0x09 | Quit char, arg is the char that will send a quit signal to the running process. |
+| 0x0a | Speed char, arg is the baud rate/100. |
+| 0x0b | Line buffering (waiting until newline to flush input) |
+| 0x0c | n Buffering flush every arg characters (0 means disabled) |
+| 0x0d | n Buffering flush every arg characters (0 means disabled) |
 
 # First Boot
 After the user has downloaded the iso, burnt on to a USB, and booted into it, they will be greeted by a basic shell (no fancy stuff like piping). The installed packages are:
