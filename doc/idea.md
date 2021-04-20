@@ -30,7 +30,7 @@ See the filesystem hierarchy (with some examples) at [github.com/crthpl/os-idea/
 | `/devices` | Contains device files |
 
 ## App Directory Structure
-Files may only access files in this folder (unless they are verified system programs, or run with `sudo`), and folders that are opened with the program are piped into `console.r.0`.
+Files may only access files in this folder (unless they are verified system programs, or run with `sudo`), and folders that are opened with the program are piped into `console.r.0`. This folder can be moved to a different device, even if it has a different architecture (e.g., `x86_64` vs `arm64`), and it will run just fine with the same saved data, and everything. Apps can share data through the `appshare` device, and apps can deny requests for shares.
 | File/Directory | Description |
 |--|--|
 | `manifest.cfg` | Contains metadata about the program, such as how to (un)install the program, what files the program can open, the icon path, and the executables to execute for what architectures (Complete app portability!). |
@@ -42,7 +42,7 @@ Files may only access files in this folder (unless they are verified system prog
 
 
 ## Home directory structure
-Each home directory has a `config/` folder to store configuration that overrides the root config folder (`/config`), a `documents` folder to store documents, a `downloads` folder to store files downloaded from the [Internet](http://info.cern.ch/hypertext/WWW/TheProject.html), a `dev` folder to store projects being developed (this folder only exists if the user has the `dev` attribute. This shortening is used because it is so common, people are referring to developers as "devs".
+Each home directory has a `config/` folder to store configuration that overrides the root config folder (`/config`), a `Documents` folder to store documents, a `Downloads` folder to store files downloaded from the [Internet](http://info.cern.ch/hypertext/WWW/TheProject.html), a `dev` folder to store projects being developed (this folder only exists if the user has the `dev` attribute. This shortening is used because it is so common, people are referring to developers as "devs".
 | Directory | Description |
 |--|--|
 | `apps/` | Programs installed only for the current user. The structure is the same as the root `/apps`. |
@@ -82,7 +82,7 @@ Some of these may be changed in the future. Any exit code used not listed here s
 
 # Devices
 Devices in @ are controlled through the `device` program or the `write` system call.
-All devices are in the `/devices` folder and they can have seperate channels. (This is to eliminate stuff like all the `loop#` or `tty#` devices) The driver can dynamically change the amount of channels. Channel indexes are 0-based. The read/write permissions can be used to see what the device supports. 
+All devices are in the `/devices` folder and they can have seperate channels. (This is to eliminate stuff like all the `loop#` or `tty#` devices) The driver can dynamically change the amount of channels. Channel indexes are 0-based. The read/write permissions can be used to see what the device supports. Each channel has a way to initialize, configure, and end transmissions.
 
 List of Devices:
 | Name | Permission / Channels | Description |
