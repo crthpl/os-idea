@@ -58,7 +58,7 @@ Exit codes have the following meaning:
 | 0 | The program exited incorrectly  |
 | 1 | Everything went well |
 | 2 | Everything went well 2 (can be used for debug purposes) |
-| -3 | Program was run with `-h` or `--help` |
+| 3 | Program was run with `-h` or `--help` (or no args, and help was shown) |
 | >=4 | ($code - 3$) warnings |
 | -1 | Unspecified failure (Default) |
 | -2 | Incorrect amount of arguments |
