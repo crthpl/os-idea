@@ -141,6 +141,7 @@ The format is: `\e` + command (256 different commands) + args (args are known fr
 
 ## Terminal Settings
 | Number | Description |
+|--|--|
 | 0x00 | Input Echoing (display `console.r.0` on screen) |
 | 0x01 | Output Echoing (display `console.w.0` on screen |
 | 0x02 | Debug Input Echoing (display `console.r.1` on screen) |
@@ -155,6 +156,8 @@ The format is: `\e` + command (256 different commands) + args (args are known fr
 | 0x0b | Line buffering (waiting until newline to flush input) |
 | 0x0c | n Buffering flush every arg characters (0 means disabled) |
 | 0x0d | n Buffering flush every arg characters (0 means disabled) |
+| 0x0e | Enable Output |
+| 0x0f | Enable Input |
 
 # First Boot
 After the user has downloaded the iso, burnt on to a USB, and booted into it, they will be greeted by a basic shell (no fancy stuff like piping). The installed packages are:
