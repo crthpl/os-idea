@@ -131,7 +131,7 @@ The format is: `\e` + command (256 different commands) + args (args are known fr
 | 0x07 | Subscript |
 | 0x08 | Framed (All text within is framed with a rectangle (or a polygon with more sides, if it is multiline, but still only right angles), will add screeshot of examples sometime) |
 | 0x09 | Blink (default twice per second) |
-| 0xfe | Rainbow (Equivalent to adding `| lolcat` to the end of the command) |
+| 0xfe | Rainbow (Equivalent to adding '| lolcat' to the end of the command) |
 | 0xff | Rainbow, but strobing (speed controlled by blink speed) |
 
 # First Boot
