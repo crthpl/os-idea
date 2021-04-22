@@ -60,12 +60,11 @@ Exit codes can be between `−32768` and `32767`. Exit codes greater than 0 mean
 Exit codes have the following meaning:
 | Code | Meaning |
 |--|--|
-| 0 | The program exited incorrectly  |
-| 1 | Everything went well |
-| 2 | Everything went well 2 (can be used for debug purposes) |
-| 3 | Program was run with `-h` or `--help` (or no args, and help was shown) |
-| >=4 | ($code - 3$) warnings |
-| -1 | Unspecified failure (Default) |
+| 0 | Everything went well |
+| 1 | Everything went well 2 (can be used for debug purposes) |
+| 2 | Program was run with `-h` or `--help` (or no args, and help was shown) |
+| >=3 | ($code - 3$) warnings |
+| -1 | Unspecified failure (Default failure) |
 | -2 | Incorrect amount of arguments |
 | -3 | Unknown switch |
 | -5 | Unknown argument (unspecified argument error) |
@@ -197,3 +196,21 @@ TODO
 | `pm` | The @ **P**ackage **M**anager. Name to be decided. | `pm` | `pm` |
 | `partition-utils` | A CLI for changing, moving, creating, and reading partitions | `partitions` | `part` |
 | `vlib` | The V standard library dynamically linkable shared object file. This is more core than `core`, and if you delete this, none of the other applications on this list will work. | `vlib` | `vlibctl` |
+
+# System Calls
+
+## Calling convention
+### x86
+`rcx` is not saved. The syscall type is stored in `eax`, and the arguments are stored in `rdx` `rsi`, `rdi`, `r8`, `r9`, `r10`, in that order. The return value is stored in `eax` and the error in `rdx` (0 means no error)
+
+## Table
+| Type | Mnemonic | Return Value (error is always there) | Arg 1 | Arg 2 | Arg 3 | Arg 4 | Arg 5 |
+|--|--|--|--|--|--|--|--|
+| 0 | read | bytes read | fd u64 | buf \*u8 | count u64 |||
+| 1 | write | bytes written | fd u64 | buf \*u8 | count u64 |||
+| 2 | open | file descriptor |  path \*u8 | pathlen u64 | flags u64 |||
+| 3 | close | nothing |  fd u64 |||||
+| 4 | stat | pointer to stat struct | path \*u8 | pathlen u64 ||||
+| 5 | fstat | pointer to stat struct | fd u64 |||||
+| 6 | seek | offset from start of file | fd u64 | offset i64 | whence u64 |||
+| tbc | exit | nothing | code u64 |||||
