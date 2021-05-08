@@ -2,8 +2,6 @@ Table of Contents
 ---
 [Filesystem Hierarchy](hierarchy.md)
 
-[Devices](devices.md)
-
 [Program Return Values](returns.md)
 
 [Terminal](terminal.md)
@@ -11,6 +9,8 @@ Table of Contents
 [How to Install](installtion.md)
 
 [Package Manager](package-manager.md)
+
+[Devices](devices.md)
 
 [System Calls](syscalls.md)
 
