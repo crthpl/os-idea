@@ -2,13 +2,13 @@ Table of Contents
 ---
 [Filesystem Hierarchy](hierarchy.md)
 
-[Program Return Values](returns.md)
-
-[Terminal](terminal.md)
-
 [How to Install](installtion.md)
 
 [Package Manager](package-manager.md)
+
+[Terminal](terminal.md)
+
+[Program Return Values](returns.md)
 
 [Devices](devices.md)
 
