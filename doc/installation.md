@@ -18,6 +18,6 @@ When in the operating system, one has to setup the following:
  7. Change your bootloader settings to make the partition you chose in step 3. the default. If you passed `--create-bootloader` in step 3., this is not required.
  8. Reboot
 
-From there, you can install other packages (or uninstall the builtin packages - `pm` can uninstall all of the above packages, including `pm`), such as a better shell, an editor, and some other file manipulation utilities (such as symbolic links makers and extended attributes editors). 
+From there, you can install other packages (or uninstall the builtin packages - `pm` can uninstall all of the above packages, including `pm`), such as a better shell, an editor, and some other file manipulation utilities (such as symbolic links makers and extended attributes editors). See [Package Manager](package-manager.md) for more info.
 
 There will also be a different iso with everything setup, with a WM, DE, Drivers, a graphical installation, and other essentials.
